@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @Slf4j
 @RestController
-@RequestMapping("coursePublishPreDTO")
+@RequestMapping("coursePublishPre")
 public class CoursePublishPreController {
 
     @Autowired

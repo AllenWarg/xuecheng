@@ -1,6 +1,6 @@
 package com.xuecheng.content.mapper;
 
-import com.xuecheng.content.model.po.CoursePublishDTO;
+import com.xuecheng.content.model.po.CoursePublish;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
  *
  * @author itcast
  */
-public interface CoursePublishMapper extends BaseMapper<CoursePublishDTO> {
+public interface CoursePublishMapper extends BaseMapper<CoursePublish> {
 
 }

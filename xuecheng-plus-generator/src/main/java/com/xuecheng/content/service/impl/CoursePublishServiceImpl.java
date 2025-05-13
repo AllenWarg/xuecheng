@@ -1,6 +1,6 @@
 package com.xuecheng.content.service.impl;
 
-import com.xuecheng.content.model.po.CoursePublishDTO;
+import com.xuecheng.content.model.po.CoursePublish;
 import com.xuecheng.content.mapper.CoursePublishMapper;
 import com.xuecheng.content.service.CoursePublishService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -18,6 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @Slf4j
 @Service
-public class CoursePublishServiceImpl extends ServiceImpl<CoursePublishMapper, CoursePublishDTO> implements CoursePublishService {
+public class CoursePublishServiceImpl extends ServiceImpl<CoursePublishMapper, CoursePublish> implements CoursePublishService {
 
 }

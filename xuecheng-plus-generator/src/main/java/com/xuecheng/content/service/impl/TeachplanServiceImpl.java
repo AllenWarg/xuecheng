@@ -1,6 +1,6 @@
 package com.xuecheng.content.service.impl;
 
-import com.xuecheng.content.model.po.TeachplanDTO;
+import com.xuecheng.content.model.po.Teachplan;
 import com.xuecheng.content.mapper.TeachplanMapper;
 import com.xuecheng.content.service.TeachplanService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -18,6 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @Slf4j
 @Service
-public class TeachplanServiceImpl extends ServiceImpl<TeachplanMapper, TeachplanDTO> implements TeachplanService {
+public class TeachplanServiceImpl extends ServiceImpl<TeachplanMapper, Teachplan> implements TeachplanService {
 
 }

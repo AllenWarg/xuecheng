@@ -1,6 +1,6 @@
 package com.xuecheng.content.service;
 
-import com.xuecheng.content.model.po.CoursePublishPreDTO;
+import com.xuecheng.content.model.po.CoursePublishPre;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author itcast
  * @since 2025-05-12
  */
-public interface CoursePublishPreService extends IService<CoursePublishPreDTO> {
+public interface CoursePublishPreService extends IService<CoursePublishPre> {
 
 }

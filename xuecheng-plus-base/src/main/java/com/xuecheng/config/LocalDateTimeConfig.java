@@ -34,7 +34,7 @@ public class LocalDateTimeConfig {
 
 
     // 配置
-    @Bean
+    //@Bean
     public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
         return builder -> {
             builder.serializerByType(LocalDateTime.class, localDateTimeSerializer());

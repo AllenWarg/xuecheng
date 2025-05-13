@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @Slf4j
 @RestController
-@RequestMapping("teachplanMediaDTO")
+@RequestMapping("teachplanMedia")
 public class TeachplanMediaController {
 
     @Autowired

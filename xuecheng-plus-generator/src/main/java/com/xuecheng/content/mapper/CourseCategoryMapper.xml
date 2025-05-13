@@ -3,7 +3,7 @@
 <mapper namespace="com.xuecheng.content.mapper.CourseCategoryMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.xuecheng.content.model.po.CourseCategoryDTO">
+    <resultMap id="BaseResultMap" type="com.xuecheng.content.model.po.CourseCategory">
         <id column="id" property="id" />
         <result column="name" property="name" />
         <result column="label" property="label" />
