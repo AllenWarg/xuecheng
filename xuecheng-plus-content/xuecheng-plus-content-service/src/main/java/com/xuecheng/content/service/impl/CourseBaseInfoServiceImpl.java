@@ -3,15 +3,18 @@ package com.xuecheng.content.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xuecheng.content.mapper.CourseBaseMapper;
+import com.xuecheng.content.mapper.CourseCategoryMapper;
 import com.xuecheng.content.mapper.CourseMarketMapper;
 import com.xuecheng.content.model.dto.AddCourseBaseDto;
 import com.xuecheng.content.model.dto.QueryCourseParamsDto;
 import com.xuecheng.content.model.po.CourseBase;
+import com.xuecheng.content.model.po.CourseCategory;
 import com.xuecheng.content.model.po.CourseMarket;
 import com.xuecheng.content.service.CourseBaseInfoService;
 import com.xuecheng.execption.XueChengException;
 import com.xuecheng.model.PageParams;
 import com.xuecheng.model.PageResult;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +28,15 @@ import java.util.List;
  * @Description 课程信息表管理接口实现类
  * @DateTime: 2025/5/12 15:46
  **/
+@Slf4j
 @Service
 public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
     @Autowired
     CourseBaseMapper courseBaseMapper;
     @Autowired
     CourseMarketMapper courseMarketMapper;
+    @Autowired
+    CourseCategoryMapper courseCategoryMapper;
 
     @Override
     public PageResult<CourseBase> queryCourseBaseList(PageParams pageParams, QueryCourseParamsDto queryCourseParams) {
@@ -48,6 +54,26 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         //封装返回结果
         PageResult<CourseBase> courseBasePageResult = new PageResult<>(courseBaseList, pages.getTotal(), pages.getCurrent(), pages.getSize());
         return courseBasePageResult;
+    }
+
+    public AddCourseBaseDto queryCourseBaseById(Long id){
+        AddCourseBaseDto addCourseBaseDto = new AddCourseBaseDto();
+        CourseBase courseBase = courseBaseMapper.selectById(id);
+        CourseMarket courseMarket = courseMarketMapper.selectById(id);
+        if (courseBase==null||courseMarket==null){
+            return null;
+        }
+        BeanUtils.copyProperties(courseBase,addCourseBaseDto);
+        BeanUtils.copyProperties(courseMarket,addCourseBaseDto);
+        addCourseBaseDto.setId(courseBase.getId());
+        CourseCategory mtCourseCategory = courseCategoryMapper.selectById(courseBase.getMt());
+        CourseCategory stCourseCategory = courseCategoryMapper.selectById(courseBase.getSt());
+        if (mtCourseCategory==null||stCourseCategory==null){
+            return null;
+        }
+        addCourseBaseDto.setMtName(mtCourseCategory.getName());
+        addCourseBaseDto.setStName(stCourseCategory.getName());
+        return addCourseBaseDto;
     }
 
     @Transactional
@@ -89,5 +115,22 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         if (insert1<=0){
             throw new RuntimeException("添加课程营销失败！");
         }
+    }
+
+    @Transactional
+    public AddCourseBaseDto editCourseBaseInfo(AddCourseBaseDto addCourseBaseDto){
+        CourseBase courseBase = new CourseBase();
+        CourseMarket courseMarket = new CourseMarket();
+        BeanUtils.copyProperties(addCourseBaseDto,courseBase);
+        BeanUtils.copyProperties(addCourseBaseDto,courseMarket);
+        courseMarket.setId(courseBase.getId());
+        courseBase.setId(courseBase.getId());
+        int cb = courseBaseMapper.updateById(courseBase);
+        int cm = courseMarketMapper.updateById(courseMarket);
+        if (cb<=0||cm<=0){
+            XueChengException.cast("课程修改失败！");
+            return null;
+        }
+        return addCourseBaseDto;
     }
 }

@@ -37,8 +37,6 @@ public class CourseBaseInfoServiceTests {
     @Test
     void testAddCourseBaseInfoService(){
         AddCourseBaseDto addCourseBaseDto = new AddCourseBaseDto();
-        addCourseBaseDto.setCompanyId(594000L);
-        addCourseBaseDto.setCompanyName("我就是000");
         addCourseBaseDto.setCharge("201000");
         addCourseBaseDto.setPrice(0F);
         addCourseBaseDto.setQq("666666");
@@ -57,5 +55,11 @@ public class CourseBaseInfoServiceTests {
         addCourseBaseDto.setOriginalPrice(1F);
         Object o = courseBaseInfoService.addCourseBaseInfo(addCourseBaseDto);
         System.out.println(o);
+    }
+
+    @Test
+    void testQueryCourseBaseById(){
+        AddCourseBaseDto addCourseBaseDto = courseBaseInfoService.queryCourseBaseById(128L);
+        System.out.println(addCourseBaseDto);
     }
 }

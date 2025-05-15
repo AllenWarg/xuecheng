@@ -14,3 +14,76 @@ Content-Type: application/json
 POST {{content_host}}/content/course-category/tree-nodes
 
 
+
+### 根据课程id查询课程基本信息和课程营销信息
+GET {{content_host}}/content/course/128
+
+
+
+
+
+### 新增课程
+POST {{content_host}}/content/course
+Content-Type: application/json
+
+{
+  "charge": "201000",
+  "price": 1,
+  "originalPrice":1,
+  "qq": "22333",
+  "wechat": "223344",
+  "phone": "13333333",
+  "validDays": 365,
+  "mt": "1-1",
+  "st": "1-1-1",
+  "name": "",
+  "pic": "",
+  "teachmode": "200002",
+  "users": "初级人员",
+  "tags": "",
+  "grade": "204001",
+  "description": "自学java开发"
+}
+
+
+### 课程修改
+PUT {{content_host}}/content/course
+Content-Type: application/json
+
+{
+  "id": 128,
+  "name": "自学java开发666",
+  "users": "自学java开发",
+  "tags": "自学java开发",
+  "mt": "1-11",
+  "mtName": "系统运维",
+  "st": "1-11-10",
+  "stName": "其它",
+  "grade": "204001",
+  "teachmode": "200002",
+  "description": "自学java开发",
+  "pic": "",
+  "charge": "201001",
+  "price": 45,
+  "originalPrice": 55,
+  "qq": "4",
+  "wechat": "4",
+  "phone": "4",
+  "validDays": 365,
+  "coursePubId": null,
+  "coursePubDate": null,
+  "uiCategoryTreeSelected": [
+    "1-11",
+    "1-11-10"
+  ]
+}
+
+
+
+### 根据课程id查询课程计划
+GET {{content_host}}/content/teachplan/128/tree-nodes
+
+### 新增课程计划
+POST {{content_host}}/content/teachplan
+Content-Type: application/json
+

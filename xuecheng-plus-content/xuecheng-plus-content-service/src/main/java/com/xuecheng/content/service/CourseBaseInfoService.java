@@ -21,6 +21,12 @@ public interface CourseBaseInfoService {
      */
     public PageResult<CourseBase> queryCourseBaseList(PageParams pageParams, @RequestBody(required=false) QueryCourseParamsDto queryCourseParams);
 
+    /**
+     * @Description 通过课程id查询
+     * @param id 课程id
+     * @return 响应结果
+     */
+    AddCourseBaseDto queryCourseBaseById(Long id);
 
     /**
      * @Description 添加课程信息
@@ -28,5 +34,14 @@ public interface CourseBaseInfoService {
      * @return 响应结果
      */
     public AddCourseBaseDto addCourseBaseInfo(AddCourseBaseDto addCourseBaseDto);
+
+    /**
+     * @Description 修改课程信息
+     * @param addCourseBaseDto 课程基本信息
+     * @return 响应结果
+     */
+    public AddCourseBaseDto editCourseBaseInfo(AddCourseBaseDto addCourseBaseDto);
+
+
 
 }
