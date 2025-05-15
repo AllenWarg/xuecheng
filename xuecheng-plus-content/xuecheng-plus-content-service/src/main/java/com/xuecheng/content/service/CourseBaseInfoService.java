@@ -42,6 +42,9 @@ public interface CourseBaseInfoService {
      */
     public AddCourseBaseDto editCourseBaseInfo(AddCourseBaseDto addCourseBaseDto);
 
-
-
+    /**
+     * 删除课程信息
+     * @param id 课程信息id
+     */
+    void removeCourseBaseInfo(Long id);
 }

@@ -52,6 +52,16 @@ public class CourseBaseInfoController {
         return courseBaseInfoService.editCourseBaseInfo(addCourseBaseDto);
     }
 
+    /**
+     * 删除课程
+     * @param id 课程信息id
+     */
+    @ApiOperation("删除课程接口")
+    @DeleteMapping ("/course/{id}")
+    public void removeCourseBaseInfo(@PathVariable Long id){
+        courseBaseInfoService.removeCourseBaseInfo(id);
+    }
+
 
 
 
