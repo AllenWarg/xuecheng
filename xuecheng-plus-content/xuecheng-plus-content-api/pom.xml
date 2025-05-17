@@ -55,6 +55,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!--Spring Boot校验框架-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
@@ -71,6 +72,17 @@
             <artifactId>swagger-spring-boot-starter</artifactId>
             <version>1.9.0.RELEASE</version>
         </dependency>
+        <!--nacos服务注册依赖-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        <!--nacos服务配置注册依赖-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+
 
     </dependencies>
 
