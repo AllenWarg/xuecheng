@@ -7,6 +7,7 @@ import com.xuecheng.content.model.dto.BindTeachplanMediaDto;
 import com.xuecheng.content.model.po.Teachplan;
 import com.xuecheng.content.model.po.TeachplanMedia;
 import com.xuecheng.content.service.TeachplanyMediaService;
+import com.xuecheng.execption.XueChengException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +71,7 @@ public class TeachplanyMediaServiceImpl implements TeachplanyMediaService {
         int delete = teachplanMediaMapper.delete(qw);
         if (delete<=0){
             log.error("删除课程计划和媒资文件之间的绑定失败，teachPlanId：{}，mediaId：{}",teachPlanId,mediaId);
+            XueChengException.cast("删除课程计划和媒资文件之间的绑定失败，请重试！");
         }
     }
 }
