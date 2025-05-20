@@ -6,7 +6,6 @@ import io.minio.RemoveObjectArgs;
 import io.minio.UploadObjectArgs;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.DigestUtils;
 
 import java.io.File;
@@ -18,7 +17,7 @@ import java.io.InputStream;
  * @Description 测试minio基础api
  * @DateTime: 2025/5/16 22:23
  **/
-@SpringBootTest
+//@SpringBootTest
 public class MinioTest {
     MinioClient minioClient;
 
@@ -53,13 +52,18 @@ public class MinioTest {
     @Test
     public void testGetObject() throws Exception {
         String bucketName="testbucket";
-        String objectPath="/test/test.mp4";
+        String objectPath="merge/test.mp4";
         String filename="F:\\学习视频\\视频_开发学习类\\web前端\\【01】HTML\\day01\\01.基础班学习目标__9fxw.com.mp4";
         GetObjectArgs getObjectArgs=GetObjectArgs.builder()
                 .bucket(bucketName)
                 .object(objectPath)
                 .build();
-        InputStream object = minioClient.getObject(getObjectArgs);
+        InputStream object =null;
+        try {
+            object=minioClient.getObject(getObjectArgs);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         String objectMD5 = DigestUtils.md5DigestAsHex(object);
         FileInputStream fileInputStream = new FileInputStream(new File(filename));
         String fileMD5 = DigestUtils.md5DigestAsHex(fileInputStream);

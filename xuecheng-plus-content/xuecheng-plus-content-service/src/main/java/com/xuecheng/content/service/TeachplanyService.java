@@ -40,6 +40,10 @@ public interface TeachplanyService {
      */
     Object handleTeachplanMoveOderby(String handle,Long id);
 
+    /**
+     * 删除课程计划
+     * @param id
+     * @return
+     */
     Object removeTeachplan(Long id);
-
 }

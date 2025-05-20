@@ -29,6 +29,7 @@ public class TeachplanyServiceImpl implements TeachplanyService {
     TeachplanMapper teachplanMapper;
     @Autowired
     TeachplanMediaMapper teachplanMediaMapper;
+
     @Override
     public List<TeachplanTreeDTO> queryTeachplanyTree(Long id) {
         List<TeachplanTreeDTO> teachplanTreeDTO = teachplanMapper.selectTeachplanTree(id);
@@ -48,7 +49,11 @@ public class TeachplanyServiceImpl implements TeachplanyService {
         handleTeachplanDTO.setId(teachplan.getId());
         return handleTeachplanDTO;
     }
-
+    /**
+     * 删除课程计划
+     * @param id 课程计划id
+     * @return
+     */
     public Object removeTeachplan(Long id){
         Integer childrenNum = getChildrenNum(id);
         if (childrenNum>0){
@@ -120,7 +125,11 @@ public class TeachplanyServiceImpl implements TeachplanyService {
         }
         return teachplanyOrderby;
     }
-
+    /**
+     * 修改课程计划
+     * @param handleTeachplanDTO 课程计划传输模型
+     * @return
+     */
     @Override
     public HandleTeachplanDTO editTeachplany(HandleTeachplanDTO handleTeachplanDTO) {
         Teachplan teachplan = new Teachplan();
@@ -131,7 +140,12 @@ public class TeachplanyServiceImpl implements TeachplanyService {
         }
         return handleTeachplanDTO;
     }
-
+    /**
+     * 处理课程计划向下移动
+     * @param handle
+     * @param id
+     * @return
+     */
     public Object handleTeachplanMoveOderby(String handle,Long id){
         Teachplan teachplan = teachplanMapper.selectById(id);
         //获得当前计划的最大的排序序号和最小排序序号

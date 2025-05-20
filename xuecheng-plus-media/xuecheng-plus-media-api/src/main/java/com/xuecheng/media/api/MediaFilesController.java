@@ -36,6 +36,7 @@ public class MediaFilesController {
         Long companyId = 1232141425L;
         return mediaFileService.queryMediaFiels(companyId, pageParams, queryMediaParamsDto);
     }
+
     @ApiOperation("文件上传")
     @PostMapping("/upload/coursefile")
     public MediaFilesDTO uploadFile(@RequestPart("filedata") MultipartFile multipartFile) throws Exception {

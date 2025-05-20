@@ -1,7 +1,10 @@
 package com.xuecheng.content.api;
 
+import com.xuecheng.content.model.dto.BindTeachplanMediaDto;
 import com.xuecheng.content.model.dto.HandleTeachplanDTO;
 import com.xuecheng.content.model.dto.TeachplanTreeDTO;
+import com.xuecheng.content.model.po.TeachplanMedia;
+import com.xuecheng.content.service.TeachplanyMediaService;
 import com.xuecheng.content.service.TeachplanyService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,6 +26,9 @@ import java.util.List;
 public class TeachplanController {
     @Autowired
     TeachplanyService teachplanyService;
+
+    @Autowired
+    TeachplanyMediaService teachplanyMediaService;
     /**
      * 查询课程计划接口
      * @param id 课程id
@@ -57,5 +63,17 @@ public class TeachplanController {
     @DeleteMapping("/teachplan/{id}")
     public Object removeTeachplan(@PathVariable("id") Long id){
         return teachplanyService.removeTeachplan(id);
+    }
+
+
+    @ApiOperation(value = "课程计划和媒资信息绑定")
+    @PostMapping("/teachplan/association/media")
+    public TeachplanMedia bindTeachplanMedia(@RequestBody BindTeachplanMediaDto bindTeachplanMediaDto){
+        return teachplanyMediaService.bindTeachplanMedia(bindTeachplanMediaDto);
+    }
+    @ApiOperation(value = "删除课程计划和媒资信息绑定")
+    @DeleteMapping("/teachplan/association/media/{teachPlanId}/{mediaId}")
+    public void removeTeachplanMedia(@PathVariable Long teachPlanId,@PathVariable String mediaId){
+        teachplanyMediaService.removeTeachplanMedia(teachPlanId,mediaId);
     }
 }
