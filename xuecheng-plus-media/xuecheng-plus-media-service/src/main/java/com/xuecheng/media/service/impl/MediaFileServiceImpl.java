@@ -20,6 +20,7 @@ import io.minio.messages.DeleteError;
 import io.minio.messages.DeleteObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -63,6 +64,22 @@ public class MediaFileServiceImpl implements MediaFileService {
     @Value("${minio.bucket.videofiles}")
     String videoFilesBucket;
 
+    /**
+     * 根据媒资id获取文件id
+     * @param mediaId 媒资文件id
+     * @return
+     */
+    public RestResponse<String> queryMediaFielsById(String mediaId){
+        MediaFiles mediaFiles = mediaFilesMapper.selectById(mediaId);
+        if (mediaFiles==null){
+            return RestResponse.validfail("未上传媒资文件");
+        }
+        if (StringUtils.isEmpty(mediaFiles.getUrl())){
+            return RestResponse.validfail("媒体文件正在转码中");
+        }
+        return RestResponse.success(mediaFiles.getUrl());
+    }
+
     @Override
     public PageResult<MediaFiles> queryMediaFiels(Long companyId, PageParams pageParams, QueryMediaParamsDto queryMediaParamsDto) {
 
@@ -83,7 +100,7 @@ public class MediaFileServiceImpl implements MediaFileService {
     }
 
 
-    public MediaFilesDTO uploadFile(Long companyId, MediaFilesDTO mediaFilesDTO, String localFilePath) throws Exception {
+    public MediaFilesDTO uploadFile(Long companyId, MediaFilesDTO mediaFilesDTO, String localFilePath,String objectPath) throws Exception {
         String md5 = getFileMD5(new File(localFilePath));
         //查询该文件是否已经上传过了
         MediaFiles selectMediaFiles = mediaFilesMapper.selectById(md5);
@@ -107,8 +124,11 @@ public class MediaFileServiceImpl implements MediaFileService {
                 bucket = filesBucket;
                 break;
         }
-        String objectPath = LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("yyyy/MM/dd/")) + md5 + "/" + md5 + fileNameExtension;
+        if (StringUtils.isEmpty(objectPath)){
+           objectPath = LocalDateTime.now()
+                    .format(DateTimeFormatter.ofPattern("yyyy/MM/dd/")) + md5 + "/" + md5 + fileNameExtension;
+        }
+
         //将本地文件上传到minio中
         localFileToMinio(bucket, objectPath, localFilePath, mimeType);
         InputStream minioObject = getMinioObject(bucket, objectPath);
@@ -443,6 +463,13 @@ public class MediaFileServiceImpl implements MediaFileService {
         }
         //拼接访问文件的路径
         mediaFiles.setUrl("/" + mediaFiles.getBucket() + "/" + mediaFiles.getFilePath());
+        //将avi视频转码为mp4的任务保存
+        if ("video/x-msvideo".equals(mimeType)){
+            mediaFiles.setUrl(null);
+            MediaProcess mediaProcess = new MediaProcess();
+            BeanUtils.copyProperties(mediaFiles,mediaProcess);
+            mediaProcessService.saveMediaProcess(mediaProcess);
+        }
         mediaFiles.setFileId(mediaFiles.getId());
         mediaFiles.setStatus("1");
         int insert = mediaFilesMapper.insert(mediaFiles);
@@ -455,12 +482,6 @@ public class MediaFileServiceImpl implements MediaFileService {
         }
         BeanUtils.copyProperties(selectMediaFiles, mediaFilesDTO);
 
-        //将avi视频转码为mp4的任务保存
-        if ("video/x-msvideo".equals(mimeType)){
-            MediaProcess mediaProcess = new MediaProcess();
-            BeanUtils.copyProperties(mediaFiles,mediaProcess);
-            mediaProcessService.saveMediaProcess(mediaProcess);
-        }
         return mediaFilesDTO;
     }
 

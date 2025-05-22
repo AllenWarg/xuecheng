@@ -7,11 +7,11 @@ import java.time.LocalDateTime;
 
 /**
  * @Author gc
- * @Description 课程教书传输模型
+ * @Description 课程教师传输模型
  * @DateTime: 2025/5/15 17:19
  **/
 @Data
-@ApiModel(description = "课程教书传输模型")
+@ApiModel(description = "课程教师传输模型")
 public class CourseTeacherDTO{
     /**
      * 主键

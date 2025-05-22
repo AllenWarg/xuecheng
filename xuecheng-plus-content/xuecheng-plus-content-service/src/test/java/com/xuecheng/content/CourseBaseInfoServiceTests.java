@@ -53,7 +53,7 @@ public class CourseBaseInfoServiceTests {
         addCourseBaseDto.setGrade("204002");
         addCourseBaseDto.setDescription("Java软件开发课程描述信息");
         addCourseBaseDto.setOriginalPrice(1F);
-        Object o = courseBaseInfoService.addCourseBaseInfo(addCourseBaseDto);
+        Object o = courseBaseInfoService.addCourseBaseInfo(addCourseBaseDto,594000L);
         System.out.println(o);
     }
 

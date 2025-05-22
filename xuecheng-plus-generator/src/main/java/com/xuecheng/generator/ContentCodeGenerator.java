@@ -15,7 +15,7 @@ import java.util.Arrays;
  */
 public class ContentCodeGenerator {
 
-	// TODO 修改服务名以及数据表名
+	//  修改服务名以及数据表名
 	private static final String SERVICE_NAME = "content";
 
 	//数据库账号

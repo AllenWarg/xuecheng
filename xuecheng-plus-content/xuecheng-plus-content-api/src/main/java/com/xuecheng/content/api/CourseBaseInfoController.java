@@ -43,7 +43,8 @@ public class CourseBaseInfoController {
     @ApiOperation("课程添加接口")
     @PostMapping("/course")
     public AddCourseBaseDto addCourseBaseInfo(@RequestBody @Validated(ValidationGroups.Inster.class) AddCourseBaseDto addCourseBaseDto){
-        return courseBaseInfoService.addCourseBaseInfo(addCourseBaseDto);
+        Long companyId=594000L;
+        return courseBaseInfoService.addCourseBaseInfo(addCourseBaseDto,companyId);
     }
 
     @ApiOperation("课程修改接口")

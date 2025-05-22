@@ -1,9 +1,9 @@
 package com.xuecheng.model;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -13,8 +13,8 @@ import java.util.List;
  * @version 1.0
  */
 @Data
-@ToString
-public class PageResult<T> implements Serializable {
+@NoArgsConstructor
+public class PageResult<T>  {
 
     // 数据列表
     private List<T> items;

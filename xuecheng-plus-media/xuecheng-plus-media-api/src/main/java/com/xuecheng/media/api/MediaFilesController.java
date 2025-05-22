@@ -9,10 +9,7 @@ import com.xuecheng.model.PageResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -39,7 +36,8 @@ public class MediaFilesController {
 
     @ApiOperation("文件上传")
     @PostMapping("/upload/coursefile")
-    public MediaFilesDTO uploadFile(@RequestPart("filedata") MultipartFile multipartFile) throws Exception {
+    public MediaFilesDTO uploadFile(@RequestPart("filedata") MultipartFile multipartFile
+            ,@RequestParam(value="objectPath",required = false) String objectPath) throws Exception {
         Long companyId=594000L;
         String filename = multipartFile.getOriginalFilename();
         long fileSize = multipartFile.getSize();
@@ -49,7 +47,7 @@ public class MediaFilesController {
         uploadMediaFilesDTO.setFilename(filename);
         uploadMediaFilesDTO.setFileSize(fileSize);
         String localFilePath=tempFile.getAbsolutePath();
-        MediaFilesDTO mediaFilesDTO = mediaFileService.uploadFile(companyId, uploadMediaFilesDTO, localFilePath);
+        MediaFilesDTO mediaFilesDTO = mediaFileService.uploadFile(companyId, uploadMediaFilesDTO, localFilePath,objectPath);
         return mediaFilesDTO;
     }
 

@@ -21,14 +21,8 @@ public class CommonCodeGenerator {
 	private static final String DATA_SOURCE_USER_NAME  = "root";
 	private static final String DATA_SOURCE_PASSWORD  = "mysql";
 	private static final String[] TABLE_NAMES = new String[]{
-			"course_base",
-			"course_market",
-			"course_teacher",
-			"course_category",
-			"teachplan",
-			"teachplan_media",
-			"course_publish",
-			"course_publish_pre"
+			"mq_message",
+			"mq_message_history"
 
 	};
 

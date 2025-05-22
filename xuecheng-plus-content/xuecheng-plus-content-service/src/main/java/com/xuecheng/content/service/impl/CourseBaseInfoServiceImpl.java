@@ -81,14 +81,14 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
 
     @Transactional
     @Override
-    public AddCourseBaseDto addCourseBaseInfo(AddCourseBaseDto addCourseBaseDto) {
+    public AddCourseBaseDto addCourseBaseInfo(AddCourseBaseDto addCourseBaseDto,Long companyId) {
         CourseBase courseBase = new CourseBase();
         CourseMarket courseMarket = new CourseMarket();
         BeanUtils.copyProperties(addCourseBaseDto, courseBase);
         BeanUtils.copyProperties(addCourseBaseDto, courseMarket);
         courseBase.setAuditStatus("202002"); //课程审核状态
         courseBase.setStatus("203001"); //课程发布状态
-        courseBase.setCompanyId(594000L);
+        courseBase.setCompanyId(companyId);
         courseBase.setCompanyName("我就是000");
         if (StringUtils.isEmpty(courseBase.getName())){
             XueChengException.cast("课程名称不能为空！");

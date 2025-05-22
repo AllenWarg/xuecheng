@@ -33,7 +33,7 @@ public interface CourseBaseInfoService {
      * @param addCourseBaseDto 课程基本信息
      * @return 响应结果
      */
-    public AddCourseBaseDto addCourseBaseInfo(AddCourseBaseDto addCourseBaseDto);
+    public AddCourseBaseDto addCourseBaseInfo(AddCourseBaseDto addCourseBaseDto,Long companyId);
 
     /**
      * @Description 修改课程信息

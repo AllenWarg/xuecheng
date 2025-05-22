@@ -13,7 +13,7 @@ import java.util.List;
 public interface TeachplanyService {
     /**
      * 查询教学计划树
-     * @param id
+     * @param id 课程id
      * @return
      */
     List<TeachplanTreeDTO> queryTeachplanyTree(Long id);

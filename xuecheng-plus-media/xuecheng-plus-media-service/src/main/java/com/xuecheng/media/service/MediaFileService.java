@@ -39,7 +39,7 @@ public interface MediaFileService {
      * @param mediaFilesDTO 媒资文件传输dto
      * @param localFilePath 本地文件路径
      */
-    MediaFilesDTO uploadFile(Long companyId, MediaFilesDTO mediaFilesDTO, String localFilePath) throws Exception;
+    MediaFilesDTO uploadFile(Long companyId, MediaFilesDTO mediaFilesDTO, String localFilePath,String objectPath) throws Exception;
 
     /**
      * 保存MediaFiles到数据库
@@ -133,4 +133,12 @@ public interface MediaFileService {
      * @throws IOException
      */
     public String getFileMD5(File file);
+
+
+    /**
+     * 根据媒资id获取文件id
+     * @param mediaId 媒资文件id
+     * @return
+     */
+    RestResponse<String> queryMediaFielsById(String mediaId);
 }
