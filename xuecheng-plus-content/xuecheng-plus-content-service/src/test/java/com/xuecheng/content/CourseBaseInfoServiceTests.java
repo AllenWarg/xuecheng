@@ -27,7 +27,7 @@ public class CourseBaseInfoServiceTests {
         queryCourseParamsDto.setAuditStatus("202004");
         //queryCourseParamsDto.setPublishStatus("203001");
         //调用测试接口
-        PageResult<CourseBase> courseBasePageResult = courseBaseInfoService.queryCourseBaseList(pageParams, queryCourseParamsDto);
+        PageResult<CourseBase> courseBasePageResult = courseBaseInfoService.queryCourseBaseList(123L,pageParams, queryCourseParamsDto);
         System.out.println(courseBasePageResult);
 
     }

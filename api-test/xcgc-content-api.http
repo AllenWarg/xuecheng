@@ -9,8 +9,12 @@ Content-Type: application/json
   "publishStatus": ""
 }
 
+###
+GET http://localhost:63040/content/course/2
+
+
 ### 课程基本信息查询
-POST {{content_host}}/content/course/list?pageNo=1&pageSize=5
+POST http://localhost:63040/content/course/list?pageNo=1&pageSize=5
 Content-Type: application/json
 
 {
@@ -28,7 +32,7 @@ POST {{content_host}}/content/course-category/tree-nodes
 
 
 ### 根据课程id查询课程基本信息和课程营销信息
-GET {{content_host}}/content/course/128
+GET http://localhost:63040/content/course/128
 
 
 

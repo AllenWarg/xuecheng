@@ -49,6 +49,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public RestErrorResponse systemException(Exception e){
+        if (e.getMessage().equals("不允许访问")){
+            log.debug("【权限控制】",e.getMessage(),e);
+            return new RestErrorResponse("你没有访问该接口的权限。");
+        }
+
         log.error("【系统异常】{}",e.getMessage(),e);
         return new RestErrorResponse(CommonError.UNKNOWN_ERROR.getErrMessage());
     }
