@@ -105,3 +105,7 @@ Content-Type: application/json
 
 ### 根据课程id查询课程教师信息
 GET {{content_host}}/content/courseTeacher/list/72
+
+
+### 查询课程发布信息
+GET {{content_host}}/content/r/coursepublish/2

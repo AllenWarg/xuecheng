@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -145,7 +146,7 @@ public class CoursePublishServiceImpl implements CoursePublishService {
         coursePublishPre.setMarket(marketJson);
         coursePublishPre.setTeachplan(teachplanTreeJson);
         coursePublishPre.setTeachers(courseTeachersJson);
-        coursePublishPre.setStatus("202003");
+        coursePublishPre.setStatus("202003");//设置预发布表的状态为已经提交审核
         CoursePublishPre cPP = coursePublishPreMapper.selectById(courseId);
 
         if(cPP==null){
@@ -157,7 +158,7 @@ public class CoursePublishServiceImpl implements CoursePublishService {
         }else {
             coursePublishPreMapper.updateById(coursePublishPre);
         }
-        //更新审核状态为已提交
+        //更新课程基础表的审核状态为已提交
         courseBase.setAuditStatus("202003");
         courseBaseMapper.updateById(courseBase);
     }
@@ -190,6 +191,7 @@ public class CoursePublishServiceImpl implements CoursePublishService {
             coursePublish = new CoursePublish();
             BeanUtils.copyProperties(coursePublishPre,coursePublish);
             coursePublish.setStatus("203002");//已发布状态
+            coursePublish.setCreateDate(LocalDateTime.now());
             coursePublishMapper.insert(coursePublish);
         }else {
             BeanUtils.copyProperties(coursePublishPre,coursePublish);
@@ -292,6 +294,16 @@ public class CoursePublishServiceImpl implements CoursePublishService {
     public Boolean addCourseIndex(CourseIndex courseIndex){
         Boolean add = searchServiceClient.add(courseIndex);
         return add;
+    }
+
+
+    /**
+     * 根据课程id查询已经发布的课程
+     * @param courseId
+     * @return
+     */
+    public CoursePublish getCoursePublish(Long courseId){
+        return coursePublishMapper.selectById(courseId);
     }
 
 }

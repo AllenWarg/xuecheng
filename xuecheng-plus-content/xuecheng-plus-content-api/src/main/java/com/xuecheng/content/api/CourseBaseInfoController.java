@@ -34,6 +34,9 @@ public class CourseBaseInfoController {
     @RequestMapping("/course/list")
     public PageResult<CourseBase> list(PageParams pageParams, @RequestBody(required=false) QueryCourseParamsDto queryCourseParams){
         String companyId = SecurityUtil.getUser().getCompanyId();
+        if (companyId==null){
+            return null;
+        }
         PageResult<CourseBase> courseBasePageResult = courseBaseInfoService.queryCourseBaseList(Long.valueOf(companyId),pageParams, queryCourseParams);
         return courseBasePageResult;
     }
