@@ -306,4 +306,38 @@ public class CoursePublishServiceImpl implements CoursePublishService {
         return coursePublishMapper.selectById(courseId);
     }
 
+
+    /**
+     * 根据课程id获取发布课程预览信息
+     * @param courseId 课程id
+     * @return
+     */
+   public CoursePreviewDto getCoursePublishPreviewInfo(Long courseId){
+       CoursePreviewDto coursePreviewDto = new CoursePreviewDto();
+       //课程基本信息,课程营销信息
+       CourseBaseInfoDTO courseBaseInfoDTO=new CourseBaseInfoDTO();
+       //课程计划信息
+       List<TeachplanTreeDTO> teachplans;
+
+       //1.查询课程信息
+       CourseBase courseBase = courseBaseMapper.selectById(courseId);
+       if (courseBase==null){
+           log.debug("获取发布课程预览信息，查询课程基本信息为空，课程id：{}",courseId);
+           return null;
+       }
+       BeanUtils.copyProperties(courseBase,courseBaseInfoDTO);
+       //2.查询课程教习计划
+       teachplans = teachplanyService.queryTeachplanyTree(courseId);
+       if (teachplans==null){
+           log.debug("获取发布课程预览信息，查询课程教学计划信息为空，课程id：{}",courseId);
+           return null;
+       }
+
+       coursePreviewDto.setCourseBase(courseBaseInfoDTO);
+       coursePreviewDto.setTeachplans(teachplans);
+       return coursePreviewDto;
+
+
+
+   }
 }

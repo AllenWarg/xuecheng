@@ -63,4 +63,11 @@ public interface CoursePublishService {
      * @return
      */
     CoursePublish getCoursePublish(Long courseId);
+
+    /**
+     * 根据课程id获取发布课程预览信息
+     * @param courseId 课程id
+     * @return
+     */
+    CoursePreviewDto getCoursePublishPreviewInfo(Long courseId);
 }
