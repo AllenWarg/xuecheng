@@ -103,6 +103,12 @@
             <artifactId>alipay-sdk-java</artifactId>
             <version>4.40.233.ALL</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.spotify</groupId>
+            <artifactId>docker-maven-plugin</artifactId>
+            <version>1.2.2</version>
+        </dependency>
     </dependencies>
 
 </project>
