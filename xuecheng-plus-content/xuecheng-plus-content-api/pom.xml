@@ -107,7 +107,7 @@
         <dependency>
             <groupId>com.spotify</groupId>
             <artifactId>docker-maven-plugin</artifactId>
-            <version>1.2.2</version>
+            <version>1.0.0</version>
         </dependency>
 
     </dependencies>
@@ -130,7 +130,7 @@
             <plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
-                <version>1.2.2</version>
+                <version>1.0.0</version>
                 <configuration>
                     <!--修改imageName节点的内容，改为私有仓库地址和端口，再加上镜像id和 TAG,我们要直接传到私服-->
                     <!--配置最后生成的镜像名，docker images里的，我们这边取项目名:版本-->
