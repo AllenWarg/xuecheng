@@ -149,7 +149,7 @@
                     <workdir>/root</workdir>
                     <cmd>["java", "-version"]</cmd>
                     <!--来指明Dockerfile文件的所在目录，如果配置了dockerDirectory则忽略baseImage，maintainer等配置-->
-                    <!--<dockerDirectory>./</dockerDirectory>-->
+                    <dockerDirectory>./</dockerDirectory>
                     <!--2375是docker的远程端口，插件生成镜像时连接docker，这里需要指定docker远程端口-->
                     <dockerHost>http://192.168.72.65:2375</dockerHost>
                     <!--入口点，project.build.finalName就是project标签下的build标签下 的filename标签内容，testDocker-->
