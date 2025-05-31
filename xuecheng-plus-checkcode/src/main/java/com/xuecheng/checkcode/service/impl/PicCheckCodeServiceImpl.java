@@ -1,14 +1,14 @@
 package com.xuecheng.checkcode.service.impl;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
-import com.xuecheng.utils.EncryptUtil;
 import com.xuecheng.checkcode.model.CheckCodeParamsDto;
 import com.xuecheng.checkcode.model.CheckCodeResultDto;
 import com.xuecheng.checkcode.service.AbstractCheckCodeService;
 import com.xuecheng.checkcode.service.CheckCodeService;
+import com.xuecheng.utils.EncryptUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.misc.BASE64Encoder;
+
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -70,7 +70,7 @@ public class PicCheckCodeServiceImpl extends AbstractCheckCodeService implements
         String imgBase64Encoder = null;
         try {
             // 对字节数组Base64编码
-            BASE64Encoder base64Encoder = new BASE64Encoder();
+            // BASE64Encoder base64Encoder = new BASE64Encoder();
             ImageIO.write(image, "png", outputStream);
             imgBase64Encoder = "data:image/png;base64," + EncryptUtil.encodeBase64(outputStream.toByteArray());
         } catch (IOException e) {
