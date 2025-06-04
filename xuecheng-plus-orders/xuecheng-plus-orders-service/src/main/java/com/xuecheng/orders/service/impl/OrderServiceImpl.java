@@ -37,6 +37,7 @@ import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +49,8 @@ import java.util.Map;
 @Slf4j
 @Service
 public class OrderServiceImpl implements OrderService {
+    @Value("${pay.qrcodeurl}")
+    String qrcodeurl;
     @Autowired
     AlipayConfig alipayConfig;
     @Autowired
@@ -73,7 +76,8 @@ public class OrderServiceImpl implements OrderService {
         if (xcPayRecord==null) {
             return null;
         }
-        String payUrl = "http://192.168.0.100:63030/orders/requestpay?payNo=" + xcPayRecord.getPayNo();
+
+        String payUrl = qrcodeurl + xcPayRecord.getPayNo();
         String qrCode = null;
         try {
             qrCode = new QRCodeUtil().createQRCode(payUrl, 200, 200);
@@ -85,6 +89,7 @@ public class OrderServiceImpl implements OrderService {
         payRecordDto.setQrcode(qrCode);
         return payRecordDto;
     }
+
 
     /**
      * 创建订单商品
@@ -153,17 +158,17 @@ public class OrderServiceImpl implements OrderService {
             }
             body = response.getBody();
         } catch (AlipayApiException e) {
-            throw new RuntimeException(e);
+            XueChengException.cast("暂未支付，有问题请联系管理员！");
         }
 
         String tradeStatus = response.getTradeStatus();
         String outTradeNo = response.getOutTradeNo();
 
         if ("TRADE_SUCCESS".equals(tradeStatus)) {
-            //保存外部系统支付记录号
+            // 保存外部系统支付记录号
             xcPayRecord.setOutPayNo(response.getTradeNo());
-            //保存支付成功消息
-            saveAliPayStatus(xcOrders,xcPayRecord);
+            // 保存支付成功消息
+            saveAliPayStatus(xcOrders, xcPayRecord);
         }
         BeanUtils.copyProperties(xcPayRecord, payRecordDto);
         return payRecordDto;
@@ -220,7 +225,7 @@ public class OrderServiceImpl implements OrderService {
                 // 请务必判断请求时的total_fee、seller_id与通知时获取的total_fee、seller_id为一致的
                 // 如果有做过处理，不执行商户的业务程序
                 xcPayRecord.setOutPayNo(params.get("trade_no"));
-                saveAliPayStatus(xcOrders,xcPayRecord);
+                saveAliPayStatus(xcOrders, xcPayRecord);
 
                 // 注意：
                 // 如果签约的是可退款协议，那么付款完成后，支付宝系统发送该交易状态通知。
@@ -332,17 +337,17 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     // 保存支付状态
-    public void saveAliPayStatus(XcOrders xcOrders,XcPayRecord xcPayRecord){
+    public void saveAliPayStatus(XcOrders xcOrders, XcPayRecord xcPayRecord) {
         //[{"code":"601001","desc":"未支付"},{"code":"601002","desc":"已支付"},{"code":"601003","desc":"已退款"}]
         xcPayRecord.setStatus("601002");
         xcOrders.setStatus("601002");
         xcOrdersMapper.updateById(xcOrders);
         xcPayRecordMapper.updateById(xcPayRecord);
         log.debug("===========课程支付成功！支付交易id：{}，订单id：{}" + xcPayRecord.getOrderId(), xcOrders.getId());
-        //添加支付成功的消息到数据库
+        // 添加支付成功的消息到数据库
         MqMessage payresultNotify = mqMessageService
                 .addMessage("payresult_notify", xcOrders.getOutBusinessId(), xcOrders.getOrderType(), null);
-        //发送选课支付成功消息到rabbitMQ
+        // 发送选课支付成功消息到rabbitMQ
         notifyPayResult(payresultNotify);
     }
 
@@ -375,8 +380,8 @@ public class OrderServiceImpl implements OrderService {
                 },
                 ex -> log.error("消息发送异常, ID:{}, 原因{}", correlationData.getId(), ex.getMessage())
         );
-        //4.发送消息
-        rabbitTemplate.convertAndSend(PayNotifyConfig.PAYNOTIFY_EXCHANGE_FANOUT,"",msgObj,correlationData);
+        // 4.发送消息
+        rabbitTemplate.convertAndSend(PayNotifyConfig.PAYNOTIFY_EXCHANGE_FANOUT, "", msgObj, correlationData);
     }
 
 }

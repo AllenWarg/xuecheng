@@ -36,10 +36,10 @@ public abstract class AbstractCheckCodeService implements CheckCodeService {
     */
     public GenerateResult generate(CheckCodeParamsDto checkCodeParamsDto,Integer code_length,String keyPrefix,Integer expire){
         //生成四位验证码
-        String code = checkCodeGenerator.generate(code_length);
+        String code = checkCodeGenerator.generate(code_length);//核心是”a~z0~9“中随机挑选4个字符
         log.debug("生成验证码:{}",code);
         //生成一个key
-        String key = keyGenerator.generate(keyPrefix);
+        String key = keyGenerator.generate(keyPrefix);//核心用keyPrefix+uuid去掉'-'
 
         //存储验证码
         checkCodeStore.set(key,code,expire);

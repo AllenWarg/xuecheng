@@ -90,7 +90,6 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         courseBase.setAuditStatus("202002"); //课程审核状态
         courseBase.setStatus("203001"); //课程发布状态
         courseBase.setCompanyId(companyId);
-        courseBase.setCompanyName("我就是000");
         if (StringUtils.isEmpty(courseBase.getName())){
             XueChengException.cast("课程名称不能为空！");
         }

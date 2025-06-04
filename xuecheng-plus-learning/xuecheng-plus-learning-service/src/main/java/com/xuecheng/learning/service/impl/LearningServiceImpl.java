@@ -36,7 +36,20 @@ public class LearningServiceImpl implements LearningService {
             log.debug("获取学习视频，查询发布课程失败。课程id：{}", courseId);
             XueChengException.cast(CommonError.OBJECT_NULL);
         }
-        // 该课程的教学计划是否支持试学
+
+        // 1.未登录时
+        //[{"code":"201000","desc":"免费"},{"code":"201001","desc":"收费"}]
+        String charge = coursepublish.getCharge();
+        if ("201000".equals(charge)) {
+            RestResponse<String> playUrl = mediaServiceClient.getPlayUrlByMediaId(mediaId);
+            if (playUrl==null) {
+                log.debug("获取学习视频链接失败，失败媒资文件id：{}", mediaId);
+                XueChengException.cast(CommonError.OBJECT_NULL);
+            }
+            return playUrl;
+        }
+        //未登录时
+        //该课程的教学计划是否支持试学
         String teachplan = coursepublish.getTeachplan();
         List<TeachplanDto> teachplanDtoList = JSON.parseArray(teachplan,TeachplanDto.class);
         for (TeachplanDto teachplanDto : teachplanDtoList) {
@@ -49,17 +62,24 @@ public class LearningServiceImpl implements LearningService {
             for (TeachplanDto teachPlanTreeNode : teachplanDto.getTeachPlanTreeNodes()) {
                 Long tId = (long) teachPlanTreeNode.getId();
                 if (tId.equals(teachplanId)) {
-                    if ("1".equals(teachplanDto.getIsPreview())) {
+                    if ("1".equals(teachPlanTreeNode.getIsPreview())) {
                         return mediaServiceClient.getPlayUrlByMediaId(mediaId);
                     }
                 }
             }
         }
 
+
+
+
         // 2.学习资格判断
         // 登录的情况
         if (StringUtil.isNotEmpty(userId)) {
             XcCourseTablesDto xcCourseTablesDto = courseService.getLearnstatus(userId, courseId);
+            if (xcCourseTablesDto==null){
+                return RestResponse.validfail("课程还未发布，无法学习");
+                // XueChengException.cast("课程还未发布，无法学习");
+            }
             // 学习资格，[{"code":"702001","desc":"正常学习"},{"code":"702002","desc":"没有选课或选课后没有支付"},{"code":"702003","desc":"已过期需要申请续期或重新支付"}]
             String learnStatus = xcCourseTablesDto.getLearnStatus();
             if ("702001".equals(learnStatus)) {
@@ -70,21 +90,12 @@ public class LearningServiceImpl implements LearningService {
                 }
                 return playUrl;
             } else if ("702002".equals(learnStatus)) {
-                RestResponse.validfail("没有选课或选课后没有支付");
+                return RestResponse.validfail("没有选课或选课后没有支付");
             } else if ("702003".equals(learnStatus)) {
-                RestResponse.validfail("已过期需要申请续期或重新支付");
+                return RestResponse.validfail("已过期需要申请续期或重新支付");
             }
         }
-        // 未登录时
-        //[{"code":"201000","desc":"免费"},{"code":"201001","desc":"收费"}]
-        String charge = coursepublish.getCharge();
-        if ("201000".equals(charge)) {
-            RestResponse<String> playUrl = mediaServiceClient.getPlayUrlByMediaId(mediaId);
-            if (playUrl==null) {
-                log.debug("获取学习视频链接失败，失败媒资文件id：{}", mediaId);
-                XueChengException.cast(CommonError.OBJECT_NULL);
-            }
-        }
+
 
         return RestResponse.validfail("购买课程后才能继续学习");
     }

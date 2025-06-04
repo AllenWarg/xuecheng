@@ -1,8 +1,8 @@
 package com.xuecheng.utils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.net.*;
+import java.util.Enumeration;
 
 public class IPUtil {
 
@@ -47,5 +47,45 @@ public class IPUtil {
     }
 
 
+    /**
+     * 获取本地真正的IP地址，即获得有线或者 无线WiFi 地址。
+     * 过滤虚拟机、蓝牙等地址
+     *
+     * @return IPv4
+     */
+    public static String getRealIP() {
+        try {
+            Enumeration<NetworkInterface> allNetInterfaces = NetworkInterface.getNetworkInterfaces();
+            while (allNetInterfaces.hasMoreElements()) {
+                NetworkInterface netInterface = allNetInterfaces.nextElement();
+                // 去除回环接口，子接口，未运行和接口
+                if (netInterface.isLoopback() || netInterface.isVirtual() || !netInterface.isUp()) {
+                    continue;
+                }
 
+                if (!netInterface.getDisplayName().contains("Intel")
+                        && !netInterface.getDisplayName().contains("Realtek")
+                        && !netInterface.getDisplayName().contains("Ethernet")) {
+                    continue;
+                }
+
+                Enumeration<InetAddress> addresses = netInterface.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    InetAddress ip = addresses.nextElement();
+                    if (ip != null) {
+                        // ipv4
+                        if (ip instanceof Inet4Address) {
+                            return ip.getHostAddress();
+                        }
+                    }
+                }
+                break;
+            }
+        } catch (SocketException e) {
+            //捕获异常
+        }
+        return null;
+    }
 }
+
+

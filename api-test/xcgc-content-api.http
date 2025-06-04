@@ -109,3 +109,10 @@ GET {{content_host}}/content/courseTeacher/list/72
 
 ### 查询课程发布信息
 GET {{content_host}}/content/r/coursepublish/2
+
+
+### 课程发布查询
+GET {{content_host}}/content/course/whole/140
+
+### 课程发布查询open
+GET {{content_host}}/content/open/course/whole/140

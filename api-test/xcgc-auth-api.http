@@ -4,12 +4,6 @@ POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&gr
 
 
 
-// 密码模式，密码模式作为前端请求微服务的认证方式
-### 使用密码登录，获取token令牌
-POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&grant_type=password&username=stu1&password=111111
-
-
-
 ### 校验jwt令牌
 POST {{auth_host}}/auth/oauth/check_token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsieHVlY2hlbmctcGx1cyJdLCJ1c2VyX25hbWUiOiJ7XCJjb21wYW55SWRcIjpcIjEyMzIxNDE0MjVcIixcImNyZWF0ZVRpbWVcIjpcIjIwMjItMDktMjhUMDg6MzI6MDNcIixcImlkXCI6XCI1MlwiLFwibmFtZVwiOlwiTeiAgeW4iFwiLFwicGVybWlzc2lvbnNcIjpbXSxcInNleFwiOlwiMVwiLFwic3RhdHVzXCI6XCJcIixcInVzZXJuYW1lXCI6XCJ0MVwiLFwidXR5cGVcIjpcIjEwMTAwMlwifSIsInNjb3BlIjpbImFsbCJdLCJleHAiOjE3NDgyNTY0OTQsImF1dGhvcml0aWVzIjpbInhjX3RlYWNobWFuYWdlcl9jb3Vyc2VfYmFzZSIsInhjX3RlYWNobWFuYWdlcl9jb3Vyc2VfZGVsIiwieGNfdGVhY2htYW5hZ2VyX2NvdXJzZV9saXN0IiwieGNfdGVhY2htYW5hZ2VyX2NvdXJzZV9wbGFuIiwieGNfdGVhY2htYW5hZ2VyX2NvdXJzZSIsInhjX3RlYWNobWFuYWdlciIsInhjX3RlYWNobWFuYWdlcl9jb3Vyc2VfbWFya2V0IiwieGNfdGVhY2htYW5hZ2VyX2NvdXJzZV9wdWJsaXNoIiwieGNfdGVhY2htYW5hZ2VyX2NvdXJzZV9hZGQiXSwianRpIjoiNDhjYmU2MjktZGJlZS00YjMxLTgyYWYtNGFhZWU4YTc2NzRhIiwiY2xpZW50X2lkIjoiWGNXZWJBcHAifQ.9up8EsawfLIqfeDyx59QqeMHfhw5F7M4RNallLfJrho
 
@@ -28,8 +22,44 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsieHVlY2hlb
 
 
 //##############扩展认证请求参数后######################
-###json密码模式
+###post密码模式
 POST {{auth_host}}/auth/oauth/token
 Content-Type: application/x-www-form-urlencoded
 
 client_id=XcWebApp&client_secret=XcWebApp&grant_type=password&username={"username":"stu1","authType":"password","password":"111111"}
+
+
+###账号注册
+POST {{auth_host}}/auth/register
+Content-Type: application/json
+
+{
+  "cellphone": "111111",
+  "username": "gc",
+  "email": "gc@gc.com",
+  "nickname": "gc",
+  "password": "gc",
+  "confirmpwd": "gc",
+  "checkcodekey": "1",
+  "checkcode": "1"
+}
+
+
+###账号密码找回
+POST {{auth_host}}/auth/findpassword
+Content-Type: application/json
+
+{
+  "cellphone": "111111",
+  "username": "gc",
+  "email": "gc@gc.com",
+  "nickname": "gc",
+  "password": "gc",
+  "confirmpwd": "gc",
+  "checkcodekey": "1",
+  "checkcode": "1"
+}
+
+
+###微信登录接口测试
+POST {{auth_host}}/auth/wxLogin?code=1

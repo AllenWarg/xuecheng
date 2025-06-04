@@ -23,7 +23,10 @@ public class CourseOpenController {
     @GetMapping("/course/whole/{courseId}")
     public CoursePreviewDto getPreviewInfo(@PathVariable("courseId") Long courseId) {
         //获取课程预览信息
-        CoursePreviewDto coursePreviewInfo = coursePublishService.getCoursePreviewInfo(courseId);
+        //CoursePreviewDto coursePreviewInfo = coursePublishService.getCoursePreviewInfo(courseId);
+        CoursePreviewDto coursePreviewInfo = coursePublishService.getCoursePreviewInfoCache(courseId);
         return coursePreviewInfo;
     }
+
+
 }

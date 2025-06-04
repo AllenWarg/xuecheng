@@ -85,7 +85,7 @@ public class MediaFileServiceImpl implements MediaFileService {
 
         //构建查询条件对象
         LambdaQueryWrapper<MediaFiles> queryWrapper = new LambdaQueryWrapper<>();
-
+        queryWrapper.eq(MediaFiles::getCompanyId, companyId);
         //分页对象
         Page<MediaFiles> page = new Page<>(pageParams.getPageNo(), pageParams.getPageSize());
         // 查询数据内容获得结果
@@ -139,9 +139,9 @@ public class MediaFileServiceImpl implements MediaFileService {
         mediaFilesDTO.setId(md5);
         mediaFilesDTO.setFileId(md5);
         mediaFilesDTO.setCompanyId(companyId);
-        mediaFilesDTO.setCompanyName("我就是000");
+        // mediaFilesDTO.setCompanyName("我就是000");
         mediaFilesDTO.setFilePath(objectPath);
-        mediaFilesDTO.setTags("课程图片");
+        // mediaFilesDTO.setTags("课程图片");
         //将信息保存到数据库,通过代理对象调用保证事务受控制。
         MediaFilesDTO resMediaFiles = mediaFileServiceProxy.saveMediaFiles(mediaFilesDTO);
         return resMediaFiles;
@@ -212,7 +212,7 @@ public class MediaFileServiceImpl implements MediaFileService {
      * @param chunkTotal 一共有多少分块
      * @return
      */
-    public RestResponse<Boolean> mergeChunks(String fileMd5, String fileName, int chunkTotal) {
+    public RestResponse<Boolean> mergeChunks(String fileMd5, String fileName, int chunkTotal,Long companyId) {
         MediaFiles mediaFilesCheck=mediaFilesMapper.selectById(fileMd5);
         if (mediaFilesCheck!=null){
             return RestResponse.success(true);
@@ -258,8 +258,8 @@ public class MediaFileServiceImpl implements MediaFileService {
         MediaFilesDTO mediaFilesDTO = new MediaFilesDTO();
         mediaFilesDTO.setFileId(fileMd5);
         mediaFilesDTO.setId(fileMd5);
-        mediaFilesDTO.setCompanyId(594000L);
-        mediaFilesDTO.setCompanyName("我就是000");
+        mediaFilesDTO.setCompanyId(companyId);
+        // mediaFilesDTO.setCompanyName("");
         mediaFilesDTO.setFilename(fileName);
         mediaFilesDTO.setFilePath(videoObjectPath + "/merge/" + fileMd5 + type);
         mediaFilesDTO.setTags("课程视频");
@@ -273,7 +273,7 @@ public class MediaFileServiceImpl implements MediaFileService {
         minioTempFile.delete();
         //删除minio中分块文件
         deleteMinioObjects(bucket,objectPaths);
-        log.info("文件上传成功！！！！！" + fileMd5);
+        log.debug("文件合并成功成功！！！！！文件id：{}" ,fileMd5);
         return RestResponse.success(true);
     }
 
@@ -463,15 +463,12 @@ public class MediaFileServiceImpl implements MediaFileService {
         }
         //拼接访问文件的路径
         mediaFiles.setUrl("/" + mediaFiles.getBucket() + "/" + mediaFiles.getFilePath());
-        //将avi视频转码为mp4的任务保存
-        if ("video/x-msvideo".equals(mimeType)){
-            mediaFiles.setUrl(null);
-            MediaProcess mediaProcess = new MediaProcess();
-            BeanUtils.copyProperties(mediaFiles,mediaProcess);
-            mediaProcessService.saveMediaProcess(mediaProcess);
-        }
         mediaFiles.setFileId(mediaFiles.getId());
         mediaFiles.setStatus("1");
+        //如果是avi视频，需要先转码
+        if (".avi".equals(fileNameExtension)){
+            mediaFiles.setUrl(null);
+        }
         int insert = mediaFilesMapper.insert(mediaFiles);
         if (insert < 0) {
             XueChengException.cast("文件上传失败，请重试！");
@@ -479,6 +476,12 @@ public class MediaFileServiceImpl implements MediaFileService {
         MediaFiles selectMediaFiles = mediaFilesMapper.selectById(mediaFiles.getId());
         if (selectMediaFiles == null) {
             XueChengException.cast("文件上传失败，请重试！");
+        }
+        //将avi视频转码为mp4的任务保存
+        if (".avi".equals(fileNameExtension)){
+            MediaProcess mediaProcess = new MediaProcess();
+            BeanUtils.copyProperties(mediaFiles,mediaProcess);
+            mediaProcessService.saveMediaProcess(mediaProcess);
         }
         BeanUtils.copyProperties(selectMediaFiles, mediaFilesDTO);
 

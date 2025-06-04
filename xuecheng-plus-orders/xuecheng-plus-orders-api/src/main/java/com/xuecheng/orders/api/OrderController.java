@@ -34,7 +34,7 @@ public class OrderController {
     @ApiOperation("生成支付二维码")
     @ResponseBody
     @PostMapping("/generatepaycode")
-    public PayRecordDto generatepaycode(@RequestBody AddOrderDto addOrderDto){
+    public PayRecordDto generatepaycode(@RequestBody AddOrderDto addOrderDto,HttpServletRequest request){
         SecurityUtil.XcUser user = SecurityUtil.getUser();
         Long userId = Long.valueOf(user.getId());
         return orderService.generatePayOrder(addOrderDto,userId);

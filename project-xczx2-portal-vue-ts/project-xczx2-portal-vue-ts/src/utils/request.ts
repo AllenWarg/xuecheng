@@ -12,6 +12,7 @@ service.defaults.headers.post['Content-Type'] = 'application/json'
 service.interceptors.request.use(
   config => {
     let token = getToken()
+    //console.log(token)
     //alert(token)
     if (token) { 
       config.headers['Authorization'] = `Bearer ${token}`

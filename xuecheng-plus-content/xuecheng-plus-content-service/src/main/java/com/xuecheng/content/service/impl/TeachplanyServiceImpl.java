@@ -38,7 +38,14 @@ public class TeachplanyServiceImpl implements TeachplanyService {
 
     @Override
     public HandleTeachplanDTO saveTeachplany(HandleTeachplanDTO handleTeachplanDTO) {
-        Teachplan teachplan = new Teachplan();
+        Teachplan teachplan = teachplanMapper.selectById(handleTeachplanDTO.getId());
+        if (teachplan!=null){
+            HandleTeachplanDTO handleTeachplanDTOTemp = new HandleTeachplanDTO();
+            BeanUtils.copyProperties(teachplan,handleTeachplanDTOTemp);
+            return handleTeachplanDTOTemp;
+        }else {
+            teachplan = new Teachplan();
+        }
         BeanUtils.copyProperties(handleTeachplanDTO,teachplan);
         Integer maxOrderby = getTeachplanyOrderby(teachplan.getCourseId(), teachplan.getParentid(),"max");
         teachplan.setOrderby(maxOrderby+1);
@@ -132,7 +139,10 @@ public class TeachplanyServiceImpl implements TeachplanyService {
      */
     @Override
     public HandleTeachplanDTO editTeachplany(HandleTeachplanDTO handleTeachplanDTO) {
-        Teachplan teachplan = new Teachplan();
+        Teachplan teachplan = teachplanMapper.selectById(handleTeachplanDTO.getId());
+        if (teachplan==null){
+            return null;
+        }
         BeanUtils.copyProperties(handleTeachplanDTO,teachplan);
         int insert = teachplanMapper.updateById(teachplan);
         if (insert<=0){

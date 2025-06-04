@@ -70,4 +70,21 @@ public interface CoursePublishService {
      * @return
      */
     CoursePreviewDto getCoursePublishPreviewInfo(Long courseId);
+
+    /**
+     * 下架课程操作
+     * @param courseId 课程id
+     */
+    void doCourseoffline(Long courseId);
+
+
+
+    /**
+     * @description 获取课程预览信息，缓存增强
+     * @param courseId 课程id
+     * @return com.xuecheng.content.model.dto.CoursePreviewDto
+     * @author Mr.M
+     * @date 2022/9/16 15:36
+     */
+    public CoursePreviewDto getCoursePreviewInfoCache(Long courseId);
 }

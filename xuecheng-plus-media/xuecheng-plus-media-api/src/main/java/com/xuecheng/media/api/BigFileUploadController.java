@@ -1,6 +1,8 @@
 package com.xuecheng.media.api;
 
+import com.xuecheng.execption.XueChengException;
 import com.xuecheng.media.service.MediaFileService;
+import com.xuecheng.media.util.SecurityUtil;
 import com.xuecheng.model.RestResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,6 +28,10 @@ public class BigFileUploadController {
     @ApiOperation("上传前进行文件检查")
     @PostMapping("/upload/checkfile")
     public RestResponse<Boolean> checkFile(@RequestParam("fileMd5") String fileMd5) {
+        SecurityUtil.XcUser user = SecurityUtil.getUser();
+        if (user==null){
+            XueChengException.cast("请先登录账号后上传。");
+        }
         return mediaFileService.checkFile(fileMd5);
     }
 
@@ -33,7 +39,10 @@ public class BigFileUploadController {
     @PostMapping("/upload/checkchunk")
     public RestResponse<Boolean> checkChunk(@RequestParam("fileMd5") String fileMd5,
                                             @RequestParam("chunk") int chunk) throws Exception {
-
+        SecurityUtil.XcUser user = SecurityUtil.getUser();
+        if (user==null){
+            XueChengException.cast("请先登录账号后上传。");
+        }
         return mediaFileService.checkChunk(fileMd5,chunk);
     }
 
@@ -53,7 +62,9 @@ public class BigFileUploadController {
     public RestResponse mergeChunks(@RequestParam("fileMd5") String fileMd5,
                                     @RequestParam("fileName") String fileName,
                                     @RequestParam("chunkTotal") int chunkTotal) throws Exception {
-        return mediaFileService.mergeChunks(fileMd5,fileName,chunkTotal);
+        SecurityUtil.XcUser user = SecurityUtil.getUser();
+        Long companyId = Long.valueOf(user.getCompanyId());
+        return mediaFileService.mergeChunks(fileMd5,fileName,chunkTotal,companyId);
     }
 
 

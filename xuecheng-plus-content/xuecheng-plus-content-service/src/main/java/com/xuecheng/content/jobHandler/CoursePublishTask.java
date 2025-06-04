@@ -1,7 +1,9 @@
 package com.xuecheng.content.jobHandler;
 
+import com.alibaba.fastjson.JSON;
 import com.xuecheng.content.mapper.CoursePublishMapper;
 import com.xuecheng.content.model.dto.CourseIndex;
+import com.xuecheng.content.model.dto.CoursePreviewDto;
 import com.xuecheng.content.model.po.CoursePublish;
 import com.xuecheng.content.service.CoursePublishService;
 import com.xuecheng.messagesdk.model.po.MqMessage;
@@ -12,9 +14,11 @@ import com.xxl.job.core.handler.annotation.XxlJob;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author gc
@@ -29,6 +33,8 @@ public class CoursePublishTask extends MessageProcessAbstract {
     CoursePublishService coursePublishService;
     @Autowired
     CoursePublishMapper coursePublishMapper;
+    @Autowired
+    RedisTemplate<String,String> redisTemplate;
 
     @XxlJob("coursePublishTaskHandler")
     public void coursePublishTaskHandler() {
@@ -93,7 +99,7 @@ public class CoursePublishTask extends MessageProcessAbstract {
         Long taskId = mqMessage.getId();
         int stageTwo = mqMessageService.getStageTwo(taskId);
         if (stageTwo >= 1) {
-            log.debug("第二阶段添加课程索引到elasticsearch，无需重复执行。。");
+            log.debug("第二阶段添加课程索引到elasticsearch已经完成，无需重复执行。。");
             return;
         }
 
@@ -120,12 +126,22 @@ public class CoursePublishTask extends MessageProcessAbstract {
         Long taskId = mqMessage.getId();
         int stageThree = mqMessageService.getStageThree(taskId);
         if (stageThree >= 1) {
-            log.debug("第三阶段将课程信息保存到redis中，无需重复执行。。");
+            log.debug("第三阶段将课程信息保存到redis中已经完成，无需重复执行。。");
             return;
         }
-
+        CoursePreviewDto coursePreviewInfo = coursePublishService.getCoursePreviewInfo(courseId);
+        if (coursePreviewInfo==null){
+            log.debug("第三阶段将课程信息保存到redis中时，查询课程预览信息失败，失败课程id：{}",courseId);
+            return;
+        }
         //将课程缓存传入redis中
-        //TODO
+        String jsonString = JSON.toJSONString(coursePreviewInfo);
+        try {
+            //存入redis，设置过期时间7天
+            redisTemplate.opsForValue().set("courseId"+courseId,jsonString,7, TimeUnit.DAYS);
+        }catch (RuntimeException runtimeException){
+            log.debug("第三阶段将课程信息保存到redis中时，存入redis失败，失败课程id：{},原因：{}",courseId,runtimeException.getMessage());
+        }
         //执行成功后,更新第一阶段状态为完成状态。
         mqMessageService.completedStageThree(taskId);
     }

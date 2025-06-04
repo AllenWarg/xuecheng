@@ -4,6 +4,7 @@ import com.xuecheng.media.model.dto.MediaFilesDTO;
 import com.xuecheng.media.model.dto.QueryMediaParamsDto;
 import com.xuecheng.media.model.po.MediaFiles;
 import com.xuecheng.media.service.MediaFileService;
+import com.xuecheng.media.util.SecurityUtil;
 import com.xuecheng.model.PageParams;
 import com.xuecheng.model.PageResult;
 import io.swagger.annotations.Api;
@@ -30,7 +31,9 @@ public class MediaFilesController {
     @ApiOperation("媒资列表查询接口")
     @PostMapping("/files")
     public PageResult<MediaFiles> list(PageParams pageParams, @RequestBody QueryMediaParamsDto queryMediaParamsDto) {
-        Long companyId = 1232141425L;
+        // Long companyId = 1232141425L;
+        SecurityUtil.XcUser user = SecurityUtil.getUser();
+        Long companyId = Long.valueOf(user.getCompanyId());
         return mediaFileService.queryMediaFiels(companyId, pageParams, queryMediaParamsDto);
     }
 
@@ -38,7 +41,11 @@ public class MediaFilesController {
     @PostMapping("/upload/coursefile")
     public MediaFilesDTO uploadFile(@RequestPart("filedata") MultipartFile multipartFile
             ,@RequestParam(value="objectPath",required = false) String objectPath) throws Exception {
-        Long companyId=594000L;
+        SecurityUtil.XcUser user = SecurityUtil.getUser();
+        Long companyId=null;
+        if (user!=null){
+            companyId = Long.valueOf(user.getCompanyId());
+        }
         String filename = multipartFile.getOriginalFilename();
         long fileSize = multipartFile.getSize();
         File tempFile = File.createTempFile("minio", ".temp");

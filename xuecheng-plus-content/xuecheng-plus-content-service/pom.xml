@@ -93,10 +93,7 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.github.openfeign</groupId>
-            <artifactId>feign-httpclient</artifactId>
-        </dependency>
+
         <!--feign支持Multipart格式传参-->
         <dependency>
             <groupId>io.github.openfeign.form</groupId>
@@ -104,11 +101,27 @@
             <version>3.8.0</version>
         </dependency>
         <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-httpclient</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.github.openfeign.form</groupId>
             <artifactId>feign-form-spring</artifactId>
             <version>3.8.0</version>
         </dependency>
-
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+            <version>2.6.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+            <version>3.11.2</version>
+        </dependency>
     </dependencies>
 </project>

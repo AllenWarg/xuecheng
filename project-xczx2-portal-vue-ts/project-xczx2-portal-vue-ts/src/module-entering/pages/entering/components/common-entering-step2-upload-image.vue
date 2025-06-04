@@ -13,6 +13,7 @@
       :on-preview="handleOnPreview"
       :on-remove="handleOnRemove"
       :class="{disabled:uploadDisabled}"
+      :headers="headers"
     >
       <i class="el-icon-plus"></i>
       <div class="el-upload__tip" slot="tip" style="line-height: 20px;">
@@ -37,6 +38,7 @@ import {
 import * as qiniu from 'qiniu-js'
 import { IQnParamsDTO } from '@/entity/media-page-list'
 import { getQnParams } from '@/api/common'
+import { getToken } from '@/utils/cookies'
 
 @Component
 export default class CommonEnteringStep2UploadImage extends Vue {
@@ -69,6 +71,12 @@ export default class CommonEnteringStep2UploadImage extends Vue {
   // computed
   get uploadDisabled() {
     return this.fileList.length > 0
+  }
+  get headers() {
+    console.log('让el-upload组件上传时携带头部认证信息')
+    let token = getToken()
+    const authorization = `Bearer ${token}`
+    return { authorization }
   }
 
   /**

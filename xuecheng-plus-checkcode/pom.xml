@@ -25,7 +25,7 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
-
+        <!-- 生成验证码 -->
         <dependency>
             <groupId>com.github.penggle</groupId>
             <artifactId>kaptcha</artifactId>

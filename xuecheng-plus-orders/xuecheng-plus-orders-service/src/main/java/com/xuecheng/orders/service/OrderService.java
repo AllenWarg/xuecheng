@@ -12,7 +12,7 @@ import java.util.Map;
 public interface OrderService {
 
     /**
-     * 生成支付订单
+     * 生成支付订单二维码
      * @param addOrderDto 生成订单传递模型
      * @param userId 用户id
      * @return

@@ -114,6 +114,7 @@ public class GatewayAuthFilter implements GlobalFilter, Ordered {
 
     private Mono<Void> buildReturnMono(String error, ServerWebExchange exchange) {
         ServerHttpResponse response = exchange.getResponse();
+        //RestErrorResponse是一个传输模型，用于响应给前端
         String jsonString = JSON.toJSONString(new RestErrorResponse(error));
         byte[] bits = jsonString.getBytes(StandardCharsets.UTF_8);
         DataBuffer buffer = response.bufferFactory().wrap(bits);

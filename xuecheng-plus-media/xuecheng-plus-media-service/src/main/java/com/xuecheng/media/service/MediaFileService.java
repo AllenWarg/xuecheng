@@ -79,7 +79,7 @@ public interface MediaFileService {
      * @param chunkTotal 一共有多少分块
      * @return
      */
-    RestResponse mergeChunks(String fileMd5, String fileName, int chunkTotal);
+    RestResponse mergeChunks(String fileMd5, String fileName, int chunkTotal,Long companyId);
 
 
     /**

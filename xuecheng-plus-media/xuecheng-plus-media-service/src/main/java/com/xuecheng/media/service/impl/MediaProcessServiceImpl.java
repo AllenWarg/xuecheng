@@ -55,6 +55,9 @@ public class MediaProcessServiceImpl implements MediaProcessService {
     public int saveMediaProcess(MediaProcess mediaProcess){
         mediaProcess.setId(null);
         mediaProcess.setUrl(null);
+        //状态,1:未处理，2：处理成功  3处理失败
+        mediaProcess.setStatus("1");
+        mediaProcess.setCreateDate(LocalDateTime.now());
         mediaProcess.setFailCount(0);
         int insert = mediaProcessMapper.insert(mediaProcess);
         if (insert<=0){

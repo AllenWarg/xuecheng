@@ -8,7 +8,7 @@ import com.xuecheng.model.RestResponse;
 public interface LearningService {
     /**
      * 获取学习视频
-     * @param UserId 用户id
+     * @param userId 用户id
      * @param courseId 课程id
      * @param teachplanId 课程计划id
      * @param mediaId 媒资文件id

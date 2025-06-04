@@ -27,5 +27,4 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
            .and().csrf().disable().build();
   }
 
-
  }
