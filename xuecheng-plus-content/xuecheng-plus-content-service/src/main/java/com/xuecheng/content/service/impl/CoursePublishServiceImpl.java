@@ -383,8 +383,12 @@ public class CoursePublishServiceImpl implements CoursePublishService {
         courseBase.setAuditStatus("202002");
         int i = courseBaseMapper.updateById(courseBase);
         int i1 = coursePublishMapper.updateById(coursePublish);
+        Boolean b = searchServiceClient.removeDoc(courseId.toString());
         if (i <= 0 || i1 <= 0) {
             XueChengException.cast("课程下架失败");
+            if (b==null||!b){
+                XueChengException.cast("课程下架失败");
+            }
         }
     }
 

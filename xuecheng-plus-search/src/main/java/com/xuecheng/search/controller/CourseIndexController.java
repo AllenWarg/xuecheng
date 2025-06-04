@@ -7,10 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Mr.M
@@ -43,5 +40,14 @@ public class CourseIndexController {
         }
         return result;
 
+    }
+    @ApiOperation("添加课程索引")
+    @DeleteMapping("course/{courseId}")
+    public Boolean removeDoc(@PathVariable("courseId") String courseId){
+        Boolean b = indexService.deleteCourseIndex(courseIndexStore, courseId);
+        if (!b){
+            XueChengException.cast("删除课程索引失败");
+        }
+        return b;
     }
 }

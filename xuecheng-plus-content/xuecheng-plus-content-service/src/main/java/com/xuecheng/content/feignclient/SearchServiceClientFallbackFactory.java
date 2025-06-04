@@ -18,7 +18,13 @@ public class SearchServiceClientFallbackFactory implements FallbackFactory<Searc
         return new SearchServiceClient() {
             @Override
             public Boolean add(CourseIndex courseIndex) {
-                log.error("搜索服务远程调用失败,课程id:{}",courseIndex.getId(),throwable.toString(),throwable);
+                log.error("搜索服务远程调用失败，添加课程索引,课程id:{}",courseIndex.getId(),throwable.toString(),throwable);
+                return null;
+            }
+
+            @Override
+            public Boolean removeDoc(String courseId) {
+                log.error("搜索服务远程调用失败,删除课程索引，课程id:{}",courseId,throwable.toString(),throwable);
                 return null;
             }
         };
