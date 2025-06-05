@@ -67,7 +67,10 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     public XcChooseCourseDto saveChooseCourse(CoursePublish coursepublish, String userId) {
         XcChooseCourseDto xcChooseCourseDto = new XcChooseCourseDto();
-        XcChooseCourse xcChooseCourse = xcChooseCourseMapper.selectOne(new LambdaQueryWrapper<XcChooseCourse>().eq(XcChooseCourse::getCourseId, coursepublish.getId()));
+        LambdaQueryWrapper<XcChooseCourse> qw = new LambdaQueryWrapper<XcChooseCourse>()
+                .eq(XcChooseCourse::getCourseId, coursepublish.getId())
+                .eq(XcChooseCourse::getUserId,userId);
+        XcChooseCourse xcChooseCourse = xcChooseCourseMapper.selectOne(qw);
         if (xcChooseCourse==null) {
             xcChooseCourse = new XcChooseCourse();
         } else {

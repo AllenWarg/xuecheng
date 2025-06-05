@@ -428,12 +428,12 @@ public class CoursePublishServiceImpl implements CoursePublishService {
                 System.out.println("查询数据库！");
                 coursePreviewInfo = getCoursePreviewInfo(courseId);
                 if (coursePreviewInfo!=null) {
-                    redisTemplate.opsForValue().set("courseId:" + courseId, JSON.toJSONString(coursePreviewInfo));
+                    redisTemplate.opsForValue().set("courseId:" + courseId, JSON.toJSONString(coursePreviewInfo),new Random().nextInt(30) + 30, TimeUnit.SECONDS);
                 } else {
                     // 这种写法必须添加一个缓存过期时间,随机时间，避免缓存同时失效
                     // 因为后面新增课程时，原先不存在的key，就会存在，如果不设置过期时间那该存在的key将一直为null
                     // 当然也可以在添加课程时也同步更新缓存。
-                    redisTemplate.opsForValue().set("courseId:" + courseId, "null", new Random().nextInt(50) + 300, TimeUnit.SECONDS);
+                    redisTemplate.opsForValue().set("courseId:" + courseId, "null", new Random().nextInt(30) + 30, TimeUnit.SECONDS);
                 }
             } finally {
                 //释放锁

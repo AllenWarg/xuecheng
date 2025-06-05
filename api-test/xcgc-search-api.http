@@ -26,9 +26,9 @@ Content-Type: application/json
 
 
 ### 搜索课程
-GET {{search_host}}/search/course/list?pageNo=1&keywords=spring
+GET {{gateway_host}}/search/course/list?pageNo=1
 Content-Type: application/json
 
 
 ### 删除课程索引
-DELETE {{search_host}}/search/index/course/102
+DELETE {{gateway_host}}/search/index/course/102

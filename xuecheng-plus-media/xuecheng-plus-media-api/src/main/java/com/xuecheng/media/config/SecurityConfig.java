@@ -30,8 +30,8 @@ public class SecurityConfig extends ResourceServerConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
+                .antMatchers("/media/open/**","/upload/coursefile").permitAll()
                 .antMatchers("/media/**").authenticated()// 所有/r/**的请求必须认证通过
-                .antMatchers("/media/open/**","/upload/coursefile").anonymous()
                 .anyRequest().permitAll();
     }
 }
